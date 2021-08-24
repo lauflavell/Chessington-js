@@ -29,7 +29,6 @@ export default class Rook extends Piece {
            this.iterateThroughSquares(location.col, location.row, moves, 'horizontal')
            this.iterateThroughSquares(location.row, location.col, moves, 'vertical')
 
-            console.log(moves)
             return moves;
         } 
         
