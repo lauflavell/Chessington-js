@@ -20,7 +20,7 @@ describe('Pawn', () => {
             
             moves.should.have.length(1);
             moves.should.deep.include(Square.at(3, 0));
-            console.log(moves);
+            
         });
 
         it('can move one or two squares up on their first move', () => {
