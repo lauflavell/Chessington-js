@@ -4,6 +4,7 @@ import Board from '../../../src/engine/board';
 import Player from '../../../src/engine/player';
 import Square from '../../../src/engine/square';
 
+
 describe('Pawn', () => {
 
     describe('white pawns', () => {
@@ -32,7 +33,74 @@ describe('Pawn', () => {
             moves.should.have.length(2);
             moves.should.deep.include.members([Square.at(2, 7), Square.at(3, 7)]);
         });
+        it('can move Diagonally if there is an opponent', () => {
+            const pawn = new Pawn(Player.WHITE);
+            board.setPiece(Square.at(3, 2), pawn);
 
+            const blackPawn = new Pawn(Player.BLACK);
+            board.setPiece(Square.at(4, 3), blackPawn);
+
+            const moves = pawn.getAvailableMoves(board);
+
+            moves.should.have.length(2);
+            moves.should.deep.include.members([Square.at(4, 2), Square.at(4, 3)]);
+        });
+
+        it('can not move if opponent is white', () => {
+            const pawn = new Pawn(Player.WHITE);
+            board.setPiece(Square.at(3, 2), pawn);
+
+            const blackPawn = new Pawn(Player.WHITE);
+            board.setPiece(Square.at(4, 3), blackPawn);
+
+            const moves = pawn.getAvailableMoves(board);
+
+            moves.should.have.length(1);
+            moves.should.deep.include.members([Square.at(4, 2)]);
+        });
+
+        it.only('can not move if left diagonal when on 0 col', () => {
+            const pawn = new Pawn(Player.WHITE);
+            board.setPiece(Square.at(3, 0), pawn);
+
+            const blackPawn = new Pawn(Player.BLACK);
+            board.setPiece(Square.at(4, 1), blackPawn);
+
+            const moves = pawn.getAvailableMoves(board);
+
+            moves.should.have.length(2);
+            moves.should.deep.include.members([Square.at(4, 0), Square.at(4, 1) ]);
+        });
+
+        it('can move with two opponents', () => {
+            const pawn = new Pawn(Player.WHITE);
+            board.setPiece(Square.at(3, 1), pawn);
+
+            const blackPawn = new Pawn(Player.BLACK);
+            board.setPiece(Square.at(4, 0), blackPawn);
+
+            const black2Pawn = new Pawn(Player.BLACK);
+            board.setPiece(Square.at(4, 2), black2Pawn);
+            const moves = pawn.getAvailableMoves(board);
+
+            moves.should.have.length(3);
+            moves.should.deep.include.members([Square.at(4, 1), Square.at(4, 0), Square.at(4, 2) ]);
+        });
+
+        it('cannot move with two white blocking', () => {
+            const pawn = new Pawn(Player.WHITE);
+            board.setPiece(Square.at(3, 1), pawn);
+
+            const blackPawn = new Pawn(Player.WHITE);
+            board.setPiece(Square.at(4, 0), blackPawn);
+
+            const black2Pawn = new Pawn(Player.WHITE);
+            board.setPiece(Square.at(4, 2), black2Pawn);
+            const moves = pawn.getAvailableMoves(board);
+
+            moves.should.have.length(1);
+            moves.should.deep.include.members([Square.at(4, 1) ]);
+        });
     });
 
     describe('black pawns', () => {
@@ -59,6 +127,21 @@ describe('Pawn', () => {
 
             moves.should.have.length(2);
             moves.should.deep.include.members([Square.at(4, 7), Square.at(5, 7)]);
+        });
+
+        it.only('cannot move with two white blocking', () => {
+            const pawn = new Pawn(Player.BLACK);
+            board.setPiece(Square.at(4, 1), pawn);
+
+            const blackPawn = new Pawn(Player.WHITE);
+            board.setPiece(Square.at(3, 0), blackPawn);
+
+            const black2Pawn = new Pawn(Player.WHITE);
+            board.setPiece(Square.at(3, 2), black2Pawn);
+            const moves = pawn.getAvailableMoves(board);
+
+            moves.should.have.length(3);
+            moves.should.deep.include.members([Square.at(3, 0), Square.at(3, 1), Square.at(3, 2) ]);
         });
 
     });
